@@ -21,17 +21,15 @@ var Version = "0.9.1.0";
  */
 io.on('connection', function (socket) {
     //   socket.emit('info', Version);
-    mysqlConnectionManager.insertServerLog(socket.id.toString(), " Connection Opened  from "
-        + socket.handshake.address);
+    mysqlConnectionManager.insertServerLog(socket.id.toString(), " Connection Opened");
     /**
      * Handles incoming OidRequest
      * Sends the latest Oid Table, if the token is in the Database
      */
     socket.on('OidRequest', function (token) {
         try {
-            mysqlConnectionManager.insertServerLog(socket.id.toString(), "New OidRequest from "
-                + socket.handshake.address);
-            mysqlConnectionManager.getOidTable().then(function (row) {
+            mysqlConnectionManager.insertServerLog(socket.id.toString(), "New OidRequest");
+            mysqlConnectionManager.retrieveOidTable().then(function (row) {
                 socket.emit("OidOffer", JSON.stringify(row));
             });
         }
@@ -45,10 +43,8 @@ io.on('connection', function (socket) {
      */
     socket.on('SendData', function (data) {
         try {
-            mysqlConnectionManager.insertServerLog(socket.id.toString(), "New Data from "
-                + socket.handshake.address);
-            var a = JSON.parse(data);
-            mysqlConnectionManager.insertOidSet(a);
+            mysqlConnectionManager.insertServerLog(socket.id.toString(), "New Data");
+            mysqlConnectionManager.insertOidSet(JSON.parse(data));
             sendSimpleResult(socket, true);
         }
         catch (e) {
@@ -60,9 +56,8 @@ io.on('connection', function (socket) {
      * Sends the latest Oid Version
      */
     socket.on('OidVersionRequest', function () {
-        mysqlConnectionManager.getOidVersion().then(function (row) {
-            mysqlConnectionManager.insertServerLog(socket.id.toString(), "New OidVersionRequest from "
-                + socket.handshake.address);
+        mysqlConnectionManager.retrieveOidVersion().then(function (row) {
+            mysqlConnectionManager.insertServerLog(socket.id.toString(), "New OidVersionRequest");
             socket.emit("OidVersion", JSON.stringify(row[0]));
         });
     });
@@ -71,9 +66,8 @@ io.on('connection', function (socket) {
      * Sends the latest MPS Version
      */
     socket.on('MPSVersionRequest', function () {
-        mysqlConnectionManager.getMPSVersion().then(function (row) {
-            mysqlConnectionManager.insertServerLog(socket.id.toString(), "New MPSVersionRequest from "
-                + socket.handshake.address);
+        mysqlConnectionManager.retrieveMPSVersion().then(function (row) {
+            mysqlConnectionManager.insertServerLog(socket.id.toString(), "New MPSVersionRequest");
             socket.emit("MPSVersion", JSON.stringify(row[0]));
         });
     });

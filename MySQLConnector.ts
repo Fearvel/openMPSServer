@@ -48,7 +48,7 @@ export namespace sql {
          * Delivers multiple Oids
          * @param filter some string
          */
-        getOidTable() {
+        retrieveOidTable() {
             return new Promise((resolve, reject) => {
                 this.connection.query("Select * from Oid",
                     (err, rows) => {
@@ -63,7 +63,7 @@ export namespace sql {
          *
          * @param filter
          */
-        getOidVersion() {
+        retrieveOidVersion() {
             return new Promise((resolve, reject) => {
                 this.connection.query("Select `DValue` as Version from Directory where `DKey` = 'OidVersion'", [],
                     (err, rows) => {
@@ -78,7 +78,7 @@ export namespace sql {
          *
          * @param filter
          */
-        getMPSVersion() {
+        retrieveMPSVersion() {
             return new Promise((resolve, reject) => {
                 this.connection.query("Select `DValue` as Version from Directory where `DKey` = 'Version'", [],
                     (err, rows) => {

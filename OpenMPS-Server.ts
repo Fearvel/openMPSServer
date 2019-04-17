@@ -32,9 +32,8 @@ io.on('connection', (socket) => {
      */
     socket.on('OidRequest', (token) => {
         try {
-            mysqlConnectionManager.insertServerLog(socket.id.toString(), "New OidRequest from "
-                + socket.ipAddress.toString());
-            mysqlConnectionManager.getOidTable().then(row => {
+            mysqlConnectionManager.insertServerLog(socket.id.toString(), "New OidRequest");
+            mysqlConnectionManager.retrieveOidTable().then(row => {
                 socket.emit("OidOffer", JSON.stringify(row));
             });
         } catch (e) {
@@ -48,10 +47,8 @@ io.on('connection', (socket) => {
      */
     socket.on('SendData', (data) => {
         try {
-            mysqlConnectionManager.insertServerLog(socket.id.toString(), "New Data from "
-                + socket.ipAddress.toString());
-            var a = JSON.parse(data)
-            mysqlConnectionManager.insertOidSet(a);
+            mysqlConnectionManager.insertServerLog(socket.id.toString(), "New Data");
+            mysqlConnectionManager.insertOidSet(JSON.parse(data));
             sendSimpleResult(socket, true);
         } catch (e) {
             sendSimpleResult(socket, false);
@@ -64,9 +61,8 @@ io.on('connection', (socket) => {
      * Sends the latest Oid Version
      */
     socket.on('OidVersionRequest', () => {
-        mysqlConnectionManager.getOidVersion().then(row => {
-                mysqlConnectionManager.insertServerLog(socket.id.toString(), "New OidVersionRequest from "
-                    + socket.ipAddress.toString());
+        mysqlConnectionManager.retrieveOidVersion().then(row => {
+                mysqlConnectionManager.insertServerLog(socket.id.toString(), "New OidVersionRequest");
                 socket.emit("OidVersion", JSON.stringify(row[0]));
             }
         );
@@ -77,9 +73,8 @@ io.on('connection', (socket) => {
      * Sends the latest MPS Version
      */
     socket.on('MPSVersionRequest', () => {
-        mysqlConnectionManager.getMPSVersion().then(row => {
-                mysqlConnectionManager.insertServerLog(socket.id.toString(), "New MPSVersionRequest from "
-                    + socket.ipAddress.toString());
+        mysqlConnectionManager.retrieveMPSVersion().then(row => {
+                mysqlConnectionManager.insertServerLog(socket.id.toString(), "New MPSVersionRequest");
                 socket.emit("MPSVersion", JSON.stringify(row[0]));
             }
         );

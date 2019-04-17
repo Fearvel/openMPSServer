@@ -42,7 +42,7 @@ var sql;
          * Delivers multiple Oids
          * @param filter some string
          */
-        MySQLConnector.prototype.getOidTable = function () {
+        MySQLConnector.prototype.retrieveOidTable = function () {
             var _this = this;
             return new Promise(function (resolve, reject) {
                 _this.connection.query("Select * from Oid", function (err, rows) {
@@ -56,7 +56,7 @@ var sql;
          *
          * @param filter
          */
-        MySQLConnector.prototype.getOidVersion = function () {
+        MySQLConnector.prototype.retrieveOidVersion = function () {
             var _this = this;
             return new Promise(function (resolve, reject) {
                 _this.connection.query("Select `DValue` as Version from Directory where `DKey` = 'OidVersion'", [], function (err, rows) {
@@ -70,7 +70,7 @@ var sql;
          *
          * @param filter
          */
-        MySQLConnector.prototype.getMPSVersion = function () {
+        MySQLConnector.prototype.retrieveMPSVersion = function () {
             var _this = this;
             return new Promise(function (resolve, reject) {
                 _this.connection.query("Select `DValue` as Version from Directory where `DKey` = 'Version'", [], function (err, rows) {
