@@ -4,8 +4,12 @@ import * as config from './config.json';
 import * as https from 'https';
 import * as express from 'express';
 import * as MysqlConnector from './MySQLConnector';
+import * as MySQLConnectorForManastone from './MySQLConnectorForManastone';
+
 
 let mysqlConnectionManager = new MysqlConnector.sql.MySQLConnector;
+let mysqlConnectionManagerManastone = new MySQLConnectorForManastone.sql.MySQLConnectorForManastone;
+
 let app = express();
 let options = {
     key: fs.readFileSync(config.CertPath.key),
@@ -14,7 +18,7 @@ let options = {
 let server = https.createServer(options, app);
 let io = require('socket.io')(server);
 
-const Version = "0.9.1.0";
+const Version = "1.000.0001.0000";
 
 
 /**
@@ -31,11 +35,23 @@ io.on('connection', (socket) => {
      * Sends the latest Oid Table, if the token is in the Database
      */
     socket.on('OidRequest', (token) => {
+        let tokenData = JSON.parse(token)
         try {
-            mysqlConnectionManager.insertServerLog(socket.id.toString(), "New OidRequest");
-            mysqlConnectionManager.retrieveOidTable().then(row => {
-                socket.emit("OidOffer", JSON.stringify(row));
+            mysqlConnectionManagerManastone.checkIfTokenExists(tokenData.Token).then(tokenRow => {
+
+                let a = tokenRow;
+                if (tokenRow[0].TokenCheck == 1){
+                mysqlConnectionManager.insertServerLog(socket.id.toString(), "New OidRequest");
+                mysqlConnectionManager.retrieveOidTable().then(row => {
+                    socket.emit("OidOffer", JSON.stringify(row));
+
+                });
+                } else {
+                    socket.emit("OidOffer", "[]");
+
+                }
             });
+
         } catch (e) {
             console.log(e);
         }
@@ -63,7 +79,7 @@ io.on('connection', (socket) => {
     socket.on('OidVersionRequest', () => {
         mysqlConnectionManager.retrieveOidVersion().then(row => {
                 mysqlConnectionManager.insertServerLog(socket.id.toString(), "New OidVersionRequest");
-                socket.emit("OidVersion", JSON.stringify(row[0]));
+                socket.emit("OidVersionOffer", JSON.stringify(row[0]));
             }
         );
     });
@@ -76,6 +92,18 @@ io.on('connection', (socket) => {
         mysqlConnectionManager.retrieveMPSVersion().then(row => {
                 mysqlConnectionManager.insertServerLog(socket.id.toString(), "New MPSVersionRequest");
                 socket.emit("MPSVersion", JSON.stringify(row[0]));
+            }
+        );
+    });
+
+    /**
+     * Handles incoming MPSMinClientVersionRequest
+     * Sends the latest MPS Version
+     */
+    socket.on('MPSMinClientVersionRequest', () => {
+        mysqlConnectionManager.retrieveMPSMinClientVersion().then(row => {
+                mysqlConnectionManager.insertServerLog(socket.id.toString(), "New MPSMinClientVersionRequest");
+                socket.emit("MPSMinClientVersionOffer", JSON.stringify(row[0]));
             }
         );
     });

@@ -81,6 +81,20 @@ var sql;
             });
         };
         /**
+         *
+         * @param filter
+         */
+        MySQLConnector.prototype.retrieveMPSMinClientVersion = function () {
+            var _this = this;
+            return new Promise(function (resolve, reject) {
+                _this.connection.query("Select `DValue` as Version from Directory where `DKey` = 'MinClientVersion'", [], function (err, rows) {
+                    if (err)
+                        return reject(err);
+                    resolve(rows);
+                });
+            });
+        };
+        /**
          * Checks an Token
          * returns an boolean
          * @param token a tokenString
@@ -123,7 +137,7 @@ var sql;
         };
         MySQLConnector.prototype.insertOid = function (oidData) {
             this.connection.query("Insert into `OidData` (" +
-                " `customerRef`," +
+                " `CustomerReference`," +
                 " `VendorName`," +
                 " `Model`," +
                 " `SerialNumber`," +
@@ -180,7 +194,7 @@ var sql;
                 ") VALUES (" +
                 "?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?," +
                 " ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?," +
-                " ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);", [oidData["customerRef"],
+                " ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);", [oidData["CustomerReference"],
                 oidData["VendorName"],
                 oidData["Model"],
                 oidData["SerialNumber"],

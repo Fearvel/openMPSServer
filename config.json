@@ -9,6 +9,12 @@
     "password": "BeqK17LLvsUl2L65BcQI",
     "database": "DEV-OMPS"
   },
+  "MySQLConnectionInformationManastone": {
+    "host": "192.168.1.16",
+    "user": "DEV-OMPS-SERVER",
+    "password": "BeqK17LLvsUl2L65BcQI",
+    "database": "DEV-MANASTONE"
+  },
   "ServerPort": "9051",
   "ConfigVersion": "1.0.1.0",
   "compilerOptions": {
