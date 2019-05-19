@@ -1,13 +1,27 @@
-CREATE database OpenMPS;
-use OpenMPS;
+--Copyright (c) 2018, Andreas Schreiner
+--For openMPS-Server 1.000.0001.0000
+--This program is made for a Case sensitive MySql Server
 
+create database OMPS;
+use OMPS;
 
+--Creates the Directory Table, used for saving of key value pairs
 CREATE TABLE `Directory` (
   `DKey` varchar(400) NOT NULL,
   `DValue` varchar(400) NOT NULL,
   PRIMARY KEY (`DKey`,`DValue`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--Creates the internal logging Table ServerLog
+CREATE TABLE `ServerLog` (
+  `Id` int(11) NOT NULL AUTO_INCREMENT,
+  `SocketId` varchar(100) DEFAULT NULL,
+  `Message` text NOT NULL,
+  `DateOfIncident` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`Id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--Creates the Oid table, which contains the newest version of the client oids, which will be downloaded by the client
 CREATE TABLE `Oid` (
   `Id` bigint(20) NOT NULL AUTO_INCREMENT,
   `VendorName` text NOT NULL,
@@ -65,11 +79,12 @@ CREATE TABLE `Oid` (
   `MagentaLevel` text NOT NULL,
   `YellowLevel` text NOT NULL,
   PRIMARY KEY (`Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--Creates the table for saving the sent values from the openMPS client
 CREATE TABLE `OidData` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `customerRef` varchar(300) DEFAULT NULL,
+  `CustomerReference` varchar(300) NOT NULL DEFAULT '',
   `VendorName` varchar(300) NOT NULL DEFAULT '',
   `Model` varchar(300) NOT NULL DEFAULT '',
   `SerialNumber` varchar(300) NOT NULL DEFAULT '',
@@ -123,13 +138,8 @@ CREATE TABLE `OidData` (
   `CyanLevel` bigint(20) NOT NULL DEFAULT '0',
   `MagentaLevel` bigint(20) NOT NULL DEFAULT '0',
   `YellowLevel` bigint(20) NOT NULL DEFAULT '0',
+  `DataDate` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE `ServerLog` (
-  `Id` int(11) NOT NULL AUTO_INCREMENT,
-  `SocketId` varchar(100) DEFAULT NULL,
-  `Message` text NOT NULL,
-  `DateOfIncident` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=65 DEFAULT CHARSET=latin1;
+select 'DB created' AS '';

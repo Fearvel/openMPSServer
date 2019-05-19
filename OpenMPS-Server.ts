@@ -1,4 +1,9 @@
 #!/usr/bin/env node
+/**
+ * OpenMPS Server
+ * @author Andreas Schreiner
+ * @copyright Andreas Schreiner 2019
+ */
 import * as fs from 'fs';
 // @ts-ignore
 import * as config from './config.json';
@@ -41,12 +46,12 @@ io.on('connection', (socket) => {
             mysqlConnectionManagerManastone.checkIfTokenExists(tokenData.Token).then(tokenRow => {
 
                 let a = tokenRow;
-                if (tokenRow[0].TokenCheck == 1){
-                mysqlConnectionManager.insertServerLog(socket.id.toString(), "New OidRequest");
-                mysqlConnectionManager.retrieveOidTable().then(row => {
-                    socket.emit("OidOffer", JSON.stringify(row));
+                if (tokenRow[0].TokenCheck == 1) {
+                    mysqlConnectionManager.insertServerLog(socket.id.toString(), "New OidRequest");
+                    mysqlConnectionManager.retrieveOidTable().then(row => {
+                        socket.emit("OidOffer", JSON.stringify(row));
 
-                });
+                    });
                 } else {
                     socket.emit("OidOffer", "[]");
 

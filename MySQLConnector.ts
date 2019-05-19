@@ -1,3 +1,8 @@
+/**
+ * Connection Class for MySql Connections
+ * @author Andreas Schreiner
+ * @copyright Andreas Schreiner 2019
+ */
 import * as mysql from 'mysql';
 // @ts-ignore
 import * as config from './config.json';
@@ -24,6 +29,10 @@ export namespace sql {
             database: config.MySQLConnectionInformation.database
         };
 
+        /**
+         * Constructor
+         * Creates the connection
+         */
         constructor() {
             this.connection = mysql.createConnection(this.MySQLConfig);
         }
@@ -73,7 +82,6 @@ export namespace sql {
                     });
             });
         }
-
 
 
         /**
@@ -148,7 +156,7 @@ export namespace sql {
 
         insertOidSet(oidSet: any) {
 
-            for (let i = 0; i <  oidSet.length; i++) {
+            for (let i = 0; i < oidSet.length; i++) {
                 this.insertOid(oidSet[i]);
 
             }

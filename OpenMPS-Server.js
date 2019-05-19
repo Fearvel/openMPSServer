@@ -1,6 +1,11 @@
 #!/usr/bin/env node
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * OpenMPS Server
+ * @author Andreas Schreiner
+ * @copyright Andreas Schreiner 2019
+ */
 var fs = require("fs");
 // @ts-ignore
 var config = require("./config.json");
